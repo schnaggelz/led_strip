@@ -13,14 +13,36 @@ if __name__ == '__main__':
 
     strip = LedStrip()
     strip.init()
-
+    strip.set_brightness(10)
+    
     try:
 
         while True:           
-            color_wipe(strip, Color(255, 0, 0))  # Red wipe
-            color_wipe(strip, Color(255, 255, 255))  # Green wipe
-            color_wipe(strip, Color(0, 0, 255))  # Blue wipe
-
+            color_wipe(strip, Color(255, 0, 0), 12)  
+            color_wipe(strip, Color( 0, 0, 255), 12) 
+            color_wipe(strip, Color( 0, 255, 0), 12) 
+            color_wipe(strip, Color( 255, 0, 0), 3)
+            color_wipe(strip, Color( 0, 0, 255), 3) 
+            color_wipe(strip, Color( 255, 0, 0), 3)
+            color_wipe(strip, Color( 0, 0, 255), 3) 
+            color_wipe(strip, Color( 255, 0, 0), 3)
+            color_wipe(strip, Color( 0, 0, 255), 3) 
+            color_wipe(strip, Color( 255, 0, 0), 3)
+            color_wipe(strip, Color( 0, 0, 255), 3) 
+            color_wipe(strip, Color( 255, 0, 0), 3)
+            color_wipe(strip, Color( 0, 0, 255), 3) 
+            color_wipe(strip, Color( 255, 0, 0), 3)
+            color_wipe(strip, Color( 0, 0, 255), 3) 
+            color_wipe(strip, Color( 255, 0, 0), 3)
+            color_wipe(strip, Color( 0, 0, 255), 3) 
+            color_wipe(strip, Color( 255, 0, 0), 3)
+            color_wipe(strip, Color( 0, 0, 255), 3) 
+            color_wipe(strip, Color( 180, 255, 0), 20)
+            color_wipe(strip, Color( 60, 0, 120), 20)
+            color_wipe(strip, Color( 230, 0, 230), 20)
+            color_wipe(strip, Color( 255, 255, 255), 70)
+    
+    
     except KeyboardInterrupt:
         color_wipe(strip, Color(0, 0, 0))
 
