@@ -11,7 +11,7 @@ def Color(red, green, blue, white = 0):
     return (white << 24) | (red << 16)| (green << 8) | blue
 
 
-class __LedData(object):
+class _LED_Data(object):
     """Wrapper class which makes a SWIG LED color data array look and feel like
     a Python list of integers.
     """
@@ -82,7 +82,7 @@ class NeoPixel(object):
         ws.ws2811_t_dmanum_set(self._leds, dma)
 
         # Grab the led data array.
-        self.__led_data = __LedData(self._channel, num)
+        self.__led_data = _LED_Data(self._channel, num)
 
         # Substitute for __del__, traps an exit condition and cleans up properly
         atexit.register(self.__cleanup)
