@@ -4,7 +4,7 @@ import led_strip as ls
 if __name__ == '__main__':
 
     #strip = LedStrip()
-    #strip.begin()
+    #strip.init()
 
     try:
 
@@ -16,4 +16,4 @@ if __name__ == '__main__':
         pass # nix
         # statt nix bitte dunkel machen
 
-
+    #strip.exit()
