@@ -78,11 +78,11 @@ class NeoPixel(object):
         ws.ws2811_channel_t_strip_type_set(self._channel, strip_type)
 
         # Initialize the controller
-        ws.ws2811_t_freq_set(self._leds, freq_hz)
+        ws.ws2811_t_freq_set(self._leds, freq_hz)uhbhu
         ws.ws2811_t_dmanum_set(self._leds, dma)
 
         # Grab the led data array.
-        self._led_data = __LedData(self._channel, num)
+        self.__led_data = __LedData(self._channel, num)
 
         # Substitute for __del__, traps an exit condition and cleans up properly
         atexit.register(self.__cleanup)
@@ -113,7 +113,7 @@ class NeoPixel(object):
     def set_color(self, n, color):
         """Set LED at position n to the provided 24-bit color value (in RGB order).
         """
-        self._led_data[n] = color
+        self.__led_data[n] = color
 
     def set_color_rgb(self, n, red, green, blue, white = 0):
         """Set LED at position n to the provided red, green, and blue color.
@@ -124,7 +124,7 @@ class NeoPixel(object):
 
     def get_color(self, n):
         """Get the 24-bit RGB color value for the LED at position n."""
-        return self._led_data[n]
+        return self.__led_data[n]
 
     def set_brightness(self, brightness):
         """Scale each LED in the buffer by the provided brightness.  A brightness
@@ -142,7 +142,7 @@ class NeoPixel(object):
         """Return an object which allows access to the LED display data as if
         it were a sequence of 24-bit RGB values.
         """
-        return self._led_data
+        return self.__led_data
 
     def num_pixels(self):
         """Return the number of pixels in the display."""
