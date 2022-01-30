@@ -78,7 +78,7 @@ class NeoPixel(object):
         ws.ws2811_channel_t_strip_type_set(self._channel, strip_type)
 
         # Initialize the controller
-        ws.ws2811_t_freq_set(self._leds, freq_hz)uhbhu
+        ws.ws2811_t_freq_set(self._leds, freq_hz)
         ws.ws2811_t_dmanum_set(self._leds, dma)
 
         # Grab the led data array.
@@ -94,7 +94,7 @@ class NeoPixel(object):
             self._leds = None
             self._channel = None
 
-    def begin(self):
+    def init(self):
         """Initialize library, must be called once before other functions are
         called.
         """
@@ -102,6 +102,11 @@ class NeoPixel(object):
         if resp != ws.WS2811_SUCCESS:
             message = ws.ws2811_get_return_t_str(resp)
             raise RuntimeError('ws2811_init failed with code {0} ({1})'.format(resp, message))
+
+    def exit(self):
+        """Finalize library, must be called once on termination.
+        """
+        ws.ws2811_fini(self._leds)
 
     def show(self):
         """Update the display with the data from the LED buffer."""
