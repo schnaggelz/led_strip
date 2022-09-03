@@ -1,7 +1,7 @@
 import time
 
-from led_matrix import LedMatrix
-from neopixel import Color
+from led import LedMatrix
+from led import Color
 
 def color_wipe(matrix, color, wait_ms=50):
     for col_index in range(matrix.num_columns()):

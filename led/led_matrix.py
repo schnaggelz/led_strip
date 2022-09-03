@@ -1,5 +1,6 @@
-from neopixel import NeoPixel
-from neopixel import Color
+from .neopixel import NeoPixel
+from .neopixel import Color
+
 
 class LedMatrix(NeoPixel):
 
@@ -47,6 +48,3 @@ class LedMatrix(NeoPixel):
             super().set_color(index, Color(0, 0, 0))
         super().show()
 
-# Main program logic follows:
-if __name__ == '__main__':
-    lm = LedMatrix()

@@ -1,4 +1,4 @@
-from neopixel import NeoPixel
+from .neopixel import NeoPixel
 
 
 class LedStrip(NeoPixel):
@@ -23,7 +23,3 @@ class LedStrip(NeoPixel):
             brightness=self.LED_BRIGHTNESS,
             channel=self.LED_CHANNEL
         )
-
-# Main program logic follows:
-if __name__ == '__main__':
-    ls = LedStrip()

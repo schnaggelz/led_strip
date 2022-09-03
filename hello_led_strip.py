@@ -1,7 +1,7 @@
 import time
 
-from led_strip import LedStrip
-from neopixel import Color
+from led import LedStrip
+from led import Color
 
 def color_wipe(strip, color, wait_ms=50):
     for i in range(strip.num_pixels()):

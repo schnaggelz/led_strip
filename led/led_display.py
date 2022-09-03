@@ -1,9 +1,9 @@
 import time
 
-from led_matrix import LedMatrix
-from neopixel import Color
+from .led_matrix import LedMatrix
+from .neopixel import Color
 
-import character_patterns
+from . import led_characters as chars
 
 
 class LedDisplay(LedMatrix):
@@ -11,7 +11,7 @@ class LedDisplay(LedMatrix):
         super().__init__()
 
     def print_character(self, character, color=Color(255, 200, 10), column_offset=0, num_cols=6):
-        character_pattern = character_patterns.PATTERNS[character]
+        character_pattern = chars.PATTERNS[character]
         for row_index in range(self.LED_ROWS):
             row_pattern = character_pattern[row_index]
             row_bits = [(row_pattern >> line_bit) & 1 for line_bit in range(num_cols - 1, -1, -1)]
@@ -23,19 +23,7 @@ class LedDisplay(LedMatrix):
                     super().clear_color(row_index, column_offset + column_index)
 
     def test_all_characters(self):
-        for character in character_patterns.PATTERNS:
+        for character in chars.PATTERNS:
             self.print_character(character)
             self.show()
             time.sleep(2)
-
-
-if __name__ == '__main__':
-
-    display = LedDisplay()
-    display.init()
-    display.set_brightness(10)
-
-    display.test_all_characters()
-    
-    display.clear()
-    display.exit()
