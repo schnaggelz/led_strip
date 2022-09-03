@@ -16,8 +16,8 @@ class _LED_Data(object):
     a Python list of integers.
     """
     def __init__(self, channel, size):
-        self.size = size
-        self.channel = channel
+        self._size = size
+        self._channel = channel
 
     def __getitem__(self, pos):
         """Return the 24-bit RGB color value at the provided position or slice
@@ -26,10 +26,10 @@ class _LED_Data(object):
         # Handle if a slice of positions are passed in by grabbing all the values
         # and returning them in a list.
         if isinstance(pos, slice):
-            return [ws.ws2811_led_get(self.channel, n) for n in xrange(*pos.indices(self.size))]
+            return [ws.ws2811_led_get(self._channel, n) for n in xrange(*pos.indices(self._size))]
         # Else assume the passed in value is a number to the position.
         else:
-            return ws.ws2811_led_get(self.channel, pos)
+            return ws.ws2811_led_get(self._channel, pos)
 
     def __setitem__(self, pos, value):
         """Set the 24-bit RGB color value at the provided position or slice of
@@ -39,12 +39,12 @@ class _LED_Data(object):
         # LED data values to the provided values.
         if isinstance(pos, slice):
             index = 0
-            for n in xrange(*pos.indices(self.size)):
-                ws.ws2811_led_set(self.channel, n, value[index])
+            for n in xrange(*pos.indices(self._size)):
+                ws.ws2811_led_set(self._channel, n, value[index])
                 index += 1
         # Else assume the passed in value is a number to the position.
         else:
-            return ws.ws2811_led_set(self.channel, pos, value)
+            return ws.ws2811_led_set(self._channel, pos, value)
 
 
 class NeoPixel(object):
@@ -82,7 +82,7 @@ class NeoPixel(object):
         ws.ws2811_t_dmanum_set(self._leds, dma)
 
         # Grab the led data array.
-        self.__led_data = _LED_Data(self._channel, num)
+        self._led_data = _LED_Data(self._channel, num)
 
         # Substitute for __del__, traps an exit condition and cleans up properly
         atexit.register(self.__cleanup)
@@ -118,7 +118,7 @@ class NeoPixel(object):
     def set_color(self, n, color):
         """Set LED at position n to the provided 24-bit color value (in RGB order).
         """
-        self.__led_data[n] = color
+        self._led_data[n] = color
 
     def set_color_rgb(self, n, red, green, blue, white = 0):
         """Set LED at position n to the provided red, green, and blue color.
@@ -129,7 +129,7 @@ class NeoPixel(object):
 
     def get_color(self, n):
         """Get the 24-bit RGB color value for the LED at position n."""
-        return self.__led_data[n]
+        return self._led_data[n]
 
     def set_brightness(self, brightness):
         """Scale each LED in the buffer by the provided brightness.  A brightness
@@ -147,7 +147,7 @@ class NeoPixel(object):
         """Return an object which allows access to the LED display data as if
         it were a sequence of 24-bit RGB values.
         """
-        return self.__led_data
+        return self._led_data
 
     def num_pixels(self):
         """Return the number of pixels in the display."""
