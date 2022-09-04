@@ -8,7 +8,11 @@ if __name__ == '__main__':
     display.set_brightness(10)
 
     remote = WebRemote(display)
-    remote.start()
 
+    try:
+        remote.start()
+    except KeyboardInterrupt:
+        pass
+    
     display.clear()
     display.exit()
