@@ -1,17 +1,16 @@
+from remote import WebRemote
 from led import LedDisplay
-import time
 
 if __name__ == '__main__':
 
     display = LedDisplay()
     display.init()
-    display.set_brightness(50)
+    display.set_brightness(10)
+
+    remote = WebRemote(display)
 
     try:
-        while True:
-            display.print_string("HALLO")
-            display.show()
-            time.sleep(10)
+        remote.start()
     except KeyboardInterrupt:
         pass
     
