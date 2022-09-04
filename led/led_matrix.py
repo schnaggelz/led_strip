@@ -5,7 +5,7 @@ from .neopixel import Color
 class LedMatrix(NeoPixel):
 
     NUM_LED_ROWS = 8
-    NUM_LED_COLUMNS = 32
+    NUM_LED_COLS = 32
 
     LED_PIN = 18
     LED_FREQ_HZ = 800000
@@ -16,7 +16,7 @@ class LedMatrix(NeoPixel):
 
     def __init__(self):
         super().__init__(
-            num=self.NUM_LED_ROWS * self.NUM_LED_COLUMNS,
+            num=self.NUM_LED_ROWS * self.NUM_LED_COLS,
             pin=self.LED_PIN,
             freq_hz=self.LED_FREQ_HZ,
             dma=self.LED_DMA,
@@ -25,25 +25,19 @@ class LedMatrix(NeoPixel):
             channel=self.LED_CHANNEL
         )
 
-    def set_color(self, row_index, column_index, color):
-        if (column_index % 2) == 0:
-            index = column_index * self.NUM_LED_ROWS + row_index
-            super().set_color(index, color)
+    def set_color(self, row_idx, col_idx, color):
+        if (col_idx % 2) == 0:
+            idx = col_idx * self.NUM_LED_ROWS + row_idx
+            super().set_color(idx, color)
         else:
-            index = (column_index + 1) * self.NUM_LED_ROWS - row_index - 1
-            super().set_color(index, color)
+            idx = (col_idx + 1) * self.NUM_LED_ROWS - row_idx - 1
+            super().set_color(idx, color)
 
-    def clear_color(self, row_index, column_index):
-        self.set_color(row_index, column_index, Color(0, 0, 0))
-
-    def num_rows(self):
-        return self.NUM_LED_ROWS
-
-    def num_columns(self):
-        return self.NUM_LED_COLUMNS
+    def clear_color(self, row_idx, col_idx):
+        self.set_color(row_idx, col_idx, Color(0, 0, 0))
 
     def clear(self):
-        for index in range(self.num_columns() * self.num_rows()):
-            super().set_color(index, Color(0, 0, 0))
+        for idx in range(self.NUM_LED_ROWS * self.NUM_LED_COLS):
+            super().set_color(idx, Color(0, 0, 0))
         super().show()
 

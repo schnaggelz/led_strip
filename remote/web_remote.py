@@ -18,7 +18,7 @@ class WebRemote:
         global display
 
         content = request.json
-        id = content['id']
+        id = int(content['id'])
         text = content['text']
 
         fg_color_R = int(content['fg_color_R'])
@@ -28,11 +28,12 @@ class WebRemote:
         bg_color_G = int(content['bg_color_G'])
         bg_color_B = int(content['bg_color_B'])
 
-        display.print_string(text.upper(), 0, 0,
-            fg_color=Color(fg_color_R, fg_color_G, fg_color_B), 
-            bg_color=Color(bg_color_R, bg_color_G, bg_color_B))
+        if id == 1:
+            display.print_string(text.upper(), 0, 0,
+                fg_color=Color(fg_color_R, fg_color_G, fg_color_B), 
+                bg_color=Color(bg_color_R, bg_color_G, bg_color_B))
 
-        display.show()
+            display.show()
 
         return jsonify({"uuid":uuid})
 
