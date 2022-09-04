@@ -14,10 +14,11 @@ class LedDisplay(LedMatrix):
     NUM_COLUMN_LEDS_PER_CHAR = 6
     MAX_NUM_CHARS = 5
 
-    def __init__(self, num_cols=6):
+    def __init__(self, background_color=Color(0,0,64), num_cols=6):
         super().__init__()
+        self._background_color = background_color
 
-    def print_char(self, char, pos=0, offset=0, color=Color(200, 200, 100)):
+    def print_char(self, char, pos=0, offset=0, color=Color(255,0,0)):
         abs_offset = pos * self.NUM_COLUMN_LEDS_PER_CHAR + offset
         if abs_offset > self.NUM_LED_COLUMNS - self.NUM_COLUMN_LEDS_PER_CHAR:
             abs_offset = 0
@@ -29,11 +30,13 @@ class LedDisplay(LedMatrix):
             for column_index in range(self.NUM_COLUMN_LEDS_PER_CHAR):
                 row_bit = row_bits[column_index]
                 if row_bit:
-                    super().set_color(row_index, abs_offset + column_index, color)
+                    super().set_color(
+                        row_index, abs_offset + column_index, color)
                 else:
-                    super().clear_color(row_index, abs_offset + column_index)
+                    super().set_color(
+                        row_index, abs_offset + column_index, self._background_color)
 
-    def print_string(self, str, pos=0, offset=0, color=Color(200, 200, 100)):
+    def print_string(self, str, pos=0, offset=0, color=Color(255,0,0)):
         char_pos = 0
         if pos < self.MAX_NUM_CHARS - 1:
             char_pos = pos
