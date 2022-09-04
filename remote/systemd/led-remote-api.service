@@ -1,0 +1,14 @@
+[Unit]
+Description=LED RC API
+After=network-online.target
+ 
+[Service]
+ExecStart=/usr/bin/python3 /opt/leds/start.py
+WorkingDirectory=/opt/leds/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=leds
+ 
+[Install]
+WantedBy=multi-user.target

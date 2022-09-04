@@ -7,6 +7,8 @@ if __name__ == '__main__':
     display.init()
     display.set_brightness(10)
 
+    # display = None
+
     remote = WebRemote(display)
 
     try:

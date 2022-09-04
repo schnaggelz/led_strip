@@ -6,12 +6,17 @@ class WebRemote:
     display = None
 
     def __init__(self, display):
-        self.display = display
+        self._display = display
+        WebRemote.display = display
 
-    @app.route('/api/add_message/<uuid>', methods=['GET', 'POST'])
-    def add_message(uuid):
+    @app.route('/api/set_text/<uuid>', methods=['GET', 'POST'])
+    def set_text(uuid):
         content = request.json
-        print(content['text'])
+        text = content['text']
+
+        WebRemote.display.print_string(text)
+        WebRemote.display.show()
+
         return jsonify({"uuid":uuid})
 
     def start(self):
