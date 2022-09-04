@@ -1,56 +1,18 @@
-import http.server as http
-import os
-
-import led
-
-class LedRequestHandler(http.BaseHTTPRequestHandler):
-
-    def __init__(self, display):
-        self._display = display
-
-    def do_HEAD(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-
-    def do_GET(self):
-        html = '''
-            <html>
-            <body style="width:960px; margin: 20px auto;">
-            <h1>Hallöle Miez und Bebes</h1>
-            <p>Die Systemtemperatur ist {}</p>
-            <p>LED <a href="/on">AN</a> <a href="/off">AUS</a></p>
-            <div id="led-status"></div>
-            <script>
-                document.getElementById("led-status").innerHTML="{}";
-            </script>
-            </body>
-            </html>
-        '''
-        temp = os.popen("vcgencmd measure_temp").read()
-        self.do_HEAD()
-        status = ''
-        if self.path=='/':
-            pass
-        elif self.path=='/on':
-            self._display.test_all_characters()
-            status='LED ist AN'
-        elif self.path=='/off':
-            status='LED ist AUS'
-        self.wfile.write(html.format(temp[5:], status).encode("utf-8"))
+import requests
+from flask import Flask, request, jsonify
 
 class WebRemote:
+    app = Flask(__name__)
+    display = None
 
-    def __init__(self, display, host_name, host_port=8080):
-        self._display = display
+    def __init__(self, display):
+        self.display = display
 
-        request_handler = LedRequestHandler(display)
-        self._server = http.HTTPServer((host_name, host_port), LedRequestHandler)
+    @app.route('/api/add_message/<uuid>', methods=['GET', 'POST'])
+    def add_message(uuid):
+        content = request.json
+        print(content['text'])
+        return jsonify({"uuid":uuid})
 
     def start(self):
-        try:
-            self._server.serve_forever()
-
-        except KeyboardInterrupt:
-            self._server.server_close()
-        
+        self.app.run(host= '0.0.0.0',debug=True)
