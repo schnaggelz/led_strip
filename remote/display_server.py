@@ -1,4 +1,5 @@
 from led import LedDisplay
+from led import Color
 
 import time
 import multiprocessing as mp
@@ -16,8 +17,8 @@ class DisplayServer:
     def __del__(self):
         self.stop()
 
-    def send(self, message):
-        self._queue.put(message)
+    def send(self, message, fg_color=(255,255,255), bg_color=(0,0,0)):
+        self._queue.put((message, fg_color, bg_color))
 
     def start(self):
         if self._display is None:
@@ -40,9 +41,12 @@ class DisplayServer:
     def cycle(self, queue, display):
         while True:
             if not queue.empty():
-                word = queue.get()
-                if word != self.STOP_SIGNAL:
-                    display.print_string(word)
+                data = queue.get()
+                text = data[0]
+                fgc = Color(data[1][0], data[1][2], data[1][2])
+                bgc = Color(data[2][0], data[2][2], data[2][2])
+                if text != self.STOP_SIGNAL:
+                    display.print_string(text, fg_color=fgc, bg_color=bgc)
                     display.show()
                 else:
                     break

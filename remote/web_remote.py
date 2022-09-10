@@ -4,8 +4,6 @@ import multiprocessing as mp
 from flask import Flask, request, jsonify
 from werkzeug.serving import make_server
 
-from led import Color
-
 from .display_server import DisplayServer
 
 class WebRemote:
@@ -13,9 +11,10 @@ class WebRemote:
 
     def __init__(self):
         self._server = None
+        self._display = DisplayServer(brightness=128)
+
         global display
-        # display = DisplayServer(brightness=128)
-        # display.start()
+        display = self._display
 
     @app.route('/api/set_text/<uuid>', methods=['GET', 'POST'])
     def set_text(uuid):
@@ -31,14 +30,13 @@ class WebRemote:
         bg_color_G = int(content['bg_color_G'])
         bg_color_B = int(content['bg_color_B'])
 
-        print(text)
+        print("Printing '{}' to display".format(text))
 
         if id == 1:
             global display
-            #display.send(text.upper())
-            # display.print_string(text.upper(), 0, 0,
-            #     fg_color=Color(fg_color_R, fg_color_G, fg_color_B), 
-            #     bg_color=Color(bg_color_R, bg_color_G, bg_color_B))
+            display.send(text.upper(),
+                fg_color=(fg_color_R, fg_color_G, fg_color_B), 
+                bg_color=(bg_color_R, bg_color_G, bg_color_B))
 
         return jsonify({"uuid":uuid})
 
@@ -46,9 +44,11 @@ class WebRemote:
         if self._server is None:
             self._server = mp.Process(target=WebRemote.app.run, kwargs={'host':'0.0.0.0'})
             self._server.start()
+        self._display.start()
 
     def stop(self):
         if self._server is not None:
             self._server.terminate()
             self._server.join()
             self._server = None
+        self._display.stop()
