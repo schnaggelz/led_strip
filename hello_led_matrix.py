@@ -26,7 +26,6 @@ if __name__ == '__main__':
             color_wipe(matrix, Color(0, 255, 0)) #green
             color_wipe(matrix, Color(255, 255, 0)) #yellow
     
-    
     except KeyboardInterrupt:
         color_wipe(matrix, Color(0, 0, 0))
 
