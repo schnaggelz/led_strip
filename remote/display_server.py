@@ -1,4 +1,4 @@
-from .led_display import LedDisplay
+from led import LedDisplay
 
 import time
 import multiprocessing as mp
@@ -7,14 +7,17 @@ class DisplayServer:
 
     STOP_SIGNAL = '__!__'
 
-    def __init__(self, queue, brightness=128):
+    def __init__(self, brightness=128):
         self._proc = None
         self._display = None
-        self._queue = queue
+        self._queue = mp.Queue()
         self._brightness = brightness
 
     def __del__(self):
         self.stop()
+
+    def send(self, message):
+        self._queue.put(message)
 
     def start(self):
         if self._display is None:
