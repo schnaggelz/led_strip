@@ -3,7 +3,7 @@ from .led_display import LedDisplay
 import time
 import multiprocessing as mp
 
-class LedRotate:
+class DisplayServer:
 
     STOP_SIGNAL = '__!__'
 

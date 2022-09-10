@@ -1,11 +1,11 @@
-from led import LedRotate
+from web import LedDisplayServer
 
 import time
 import multiprocessing as mp
 
 if __name__ == '__main__':
     q = mp.Queue()
-    rot = LedRotate(q)
+    rot = LedDisplayServer(q)
     rot.start()
     q.put("TEST1")
     time.sleep(5)
