@@ -70,7 +70,7 @@ class DisplayServer:
                             fg_color=Color(data.fgc[0], data.fgc[1], data.fgc[2]),
                             bg_color=Color(data.bgc[0], data.bgc[1], data.bgc[2]))
                         display.show()
-                        time.sleep(1)            
+                        time.sleep(2.5)            
                 time.sleep(0.1)
         except:
             pass
