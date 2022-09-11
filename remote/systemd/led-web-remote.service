@@ -1,0 +1,14 @@
+[Unit]
+Description=LED Display REST API
+After=network-online.target
+ 
+[Service]
+ExecStart=/usr/bin/python3 /opt/led/webserver_start.py
+WorkingDirectory=/opt/led/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=root
+ 
+[Install]
+WantedBy=multi-user.target

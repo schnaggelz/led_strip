@@ -3,10 +3,19 @@ from led import Color
 
 import time
 import multiprocessing as mp
+from dataclasses import dataclass
 
 class DisplayServer:
 
     STOP_SIGNAL = '__!__'
+    MAX_DISPLAY_DATA = 3
+
+    @dataclass
+    class DisplayData:
+        index: int = -1
+        text: str = ""
+        fgc: tuple = (0,0,0)
+        bgc: tuple = (0,0,0)
 
     def __init__(self, brightness=128):
         self._proc = None
@@ -17,8 +26,10 @@ class DisplayServer:
     def __del__(self):
         self.stop()
 
-    def send(self, message, fg_color=(255,255,255), bg_color=(0,0,0)):
-        self._queue.put((message, fg_color, bg_color))
+    def send(self, index, text, fg_color=(255,255,255), bg_color=(0,0,0)):
+        self._queue.put(
+            DisplayServer.DisplayData(
+                index=index, text=text, fgc=fg_color, bgc=bg_color))
 
     def start(self):
         if self._display is None:
@@ -39,16 +50,28 @@ class DisplayServer:
         self._display = None
 
     def cycle(self, queue, display):
-        while True:
-            if not queue.empty():
-                data = queue.get()
-                text = data[0]
-                fgc = Color(data[1][0], data[1][2], data[1][2])
-                bgc = Color(data[2][0], data[2][2], data[2][2])
-                if text != self.STOP_SIGNAL:
-                    display.print_string(text, fg_color=fgc, bg_color=bgc)
-                    display.show()
-                else:
-                    break
-            time.sleep(0.1)
+        stop_signal = False
+        roll_data =  [None] * self.MAX_DISPLAY_DATA
+        try:
+            while not stop_signal:
+                data = None
+                if not self._queue.empty():
+                    data = queue.get()
+                    if data == self.STOP_SIGNAL:
+                        stop_signal = True
+                        break
+                    index = data.index
+                    if index >=0 and index < self.MAX_DISPLAY_DATA:
+                        roll_data[index] = data
+    
+                for data in roll_data:
+                    if data is not None:
+                        display.print_string(data.text, 
+                            fg_color=Color(data.fgc[0], data.fgc[1], data.fgc[2]),
+                            bg_color=Color(data.bgc[0], data.bgc[1], data.bgc[2]))
+                        display.show()
+                        time.sleep(1)            
+                time.sleep(0.1)
+        except:
+            pass
         

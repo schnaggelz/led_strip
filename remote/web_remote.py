@@ -20,7 +20,7 @@ class WebRemote:
     def set_text(uuid):
         
         content = request.json
-        id = int(content['id'])
+        index = int(content['id']) - 1
         text = content['text']
 
         fg_color_R = int(content['fg_color_R'])
@@ -30,13 +30,12 @@ class WebRemote:
         bg_color_G = int(content['bg_color_G'])
         bg_color_B = int(content['bg_color_B'])
 
-        print("Printing '{}' to display".format(text))
+        print("Printing '{}' to display at index {}".format(text, index))
 
-        if id == 1:
-            global display
-            display.send(text.upper(),
-                fg_color=(fg_color_R, fg_color_G, fg_color_B), 
-                bg_color=(bg_color_R, bg_color_G, bg_color_B))
+        global display
+        display.send(index, text.upper(),
+            fg_color=(fg_color_R, fg_color_G, fg_color_B), 
+            bg_color=(bg_color_R, bg_color_G, bg_color_B))
 
         return jsonify({"uuid":uuid})
 
